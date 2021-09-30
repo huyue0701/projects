@@ -1,0 +1,186 @@
+
+<!--<!DOCTYPE html>-->
+<!--<html>-->
+<!--  <head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>刮刮乐</title>-->
+<!--    <style type="text/css">-->
+<!--      #c1{-->
+<!--        border: 1px solid blue;-->
+<!--        position: absolute;-->
+<!--      }-->
+
+<!--      #c2{-->
+<!--        border: 1px solid red;-->
+<!--      }-->
+
+<!--      body{-->
+<!--        position: relative;-->
+<!--      }-->
+<!--</style>-->
+<!--  </head>-->
+<!--  <body>-->
+
+<!--    <canvas id="c1" width="960" height="1440"></canvas>-->
+
+<!--    <canvas id="c2" width="960" height="1440"></canvas>-->
+
+<!--  </body>-->
+<!--  <script type="text/javascript">-->
+<!--    let c1 = document.getElementById("c1");-->
+<!--    let c2 = document.getElementById("c2");-->
+
+<!--    let ctx1 = c1.getContext("2d");-->
+<!--    let ctx2 = c2.getContext("2d");-->
+
+
+<!--    // 绘制图片到底层  canvas2-->
+<!--    let imgs = new Image();-->
+<!--    imgs.src = 'img/boy.jpg';-->
+<!--    imgs.onload = function(){-->
+<!--      ctx2.drawImage(this,0,0)-->
+<!--    }-->
+
+<!--    // 涂层绘制到顶层(即覆盖膜)  canvas1-->
+<!--    ctx1.fillStyle = "lightgray";-->
+<!--    ctx1.fillRect(0,0,960,1440);-->
+
+<!--    ctx1.font = "normal 80px 仿宋";-->
+<!--    ctx1.strokeStyle = "slateblue";-->
+<!--    ctx1.strokeText("请刮开！",320,750);-->
+
+<!--    // 监听canvas的onmousedown事件-->
+<!--    c1.addEventListener('touchstart', (ev) => {-->
+<!--    c1.addEventListener('touchmove', (e) => {-->
+<!--      console.log(e);-->
+<!--      let w = 50;      // 清除区域的宽度-->
+<!--      let h = 50;      // 清除区域的高度-->
+<!--      let x = e.pageX-c1.offsetLeft - w/2;    // 清除区域的x位置-->
+<!--      let y = e.pageY-c1.offsetTop - h/2;    // 清除区域的y位置-->
+<!--      ctx1.clearRect(x,y,w,h);-->
+<!--    });-->
+<!--    });-->
+<!--    c1.addEventListener('touchend', (ev) => {-->
+<!--    // 取消onmousemove事件-->
+<!--    // c1.ontouchmove = null;-->
+<!--        // c1.ontouchcancel = null;-->
+<!--    });-->
+<!--</script>-->
+<!--</html>-->
+
+
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title></title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        #main {
+            width: 100%;
+            padding: 20px 0;
+            /*background-color: red;*/
+        }
+
+        .canvasBox {
+            width: 78%;
+            border-radius: 10px;
+            background-color: #FFF;
+            margin: 0 auto;
+            line-height: 160px;
+            text-align: center;
+            position: relative;
+        }
+
+        #canvas {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            left: 0;
+            top: 0;
+            /*background-color: transparent;*/
+        }
+    </style>
+</head>
+
+<body>
+<!-- 大的背景盒子-->
+<div id="main">
+    <p style="text-align: center;font-size: 21px;color: #607d8b;font-weight: 500">刮刮乐</p>
+    <!-- 定位的盒子-->
+    <div class="canvasBox">
+        <!-- 放内容的盒子-->
+        <span id="prize">
+<!--                恭喜发财，红包拿来-->
+            <img src="./img/boy.png" alt="" style="width: 100%">
+            </span>
+        <!-- 蒙版画布-->
+        <canvas id="canvas"></canvas>
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+    let canvas = document.getElementById("canvas");
+    let ctx = canvas.getContext('2d');
+    /* 画布偏移量，下面用到的时候再介绍*/
+    let arr = getOffset(canvas);
+    let oLeft = arr[0];
+    let oTop = arr[1];
+    /* 初始化画布*/
+    ctx.beginPath();
+    // ctx.fillStyle = '#red';
+    ctx.fillStyle = '#ccc';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillText("请刮开！",canvas.width, canvas.height)
+    ctx.closePath();
+
+    // ctx.font = "normal 80px 仿宋";
+    // ctx.textAlign = 'center';
+    // ctx.strokeStyle = "slateblue";
+    // ctx.strokeText("请刮开！",320,750);
+    /* 增加触摸监听*/
+    document.addEventListener("touchstart", function () {
+        /* 初始化画笔*/
+        ctx.beginPath();
+        /* 画笔粗细*/
+        ctx.lineWidth = 30;
+        /* 设置组合效果*/
+        ctx.globalCompositeOperation = 'destination-out';
+        /* 移动画笔原点*/
+        ctx.moveTo(event.touches[0].pageX - oLeft, event.touches[0].pageY - oTop);
+    }, false)
+    document.addEventListener("touchmove", function () {
+        /* 根据手指移动画线，使之变透明*/
+        ctx.lineTo(event.touches[0].pageX - oLeft, event.touches[0].pageY - oTop);
+        /* 填充*/
+
+        ctx.stroke();
+    })
+    /* 之所以会用到下面的那个函数getOffset（obj）
+     * 是因为event.touches[0].pageX、pageY获取的是相对于可视窗口的距离
+     * 而lineTo画笔的定位是根据画布位置定位的
+     * 所以就要先获取到画布(canvas)相对于可视窗口的距离，然后计算得出触摸点相对于画布的距离
+     * */
+    /* 获取该元素到可视窗口的距离*/
+    function getOffset(obj) {
+        let valLeft = 0, valTop = 0;
+        function get(obj) {
+            valLeft += obj.offsetLeft;
+            valTop += obj.offsetTop;
+            /* 不到最外层就一直调用，直到offsetParent为body*/
+            if (obj.offsetParent.tagName != 'BODY') {
+                get(obj.offsetParent);
+            }
+            return [valLeft, valTop];
+        }
+        return get(obj);
+    }
+</script>
+
+</html>
