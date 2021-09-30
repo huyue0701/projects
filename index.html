@@ -1,74 +1,4 @@
 
-<!--<!DOCTYPE html>-->
-<!--<html>-->
-<!--  <head>-->
-<!--    <meta charset="UTF-8">-->
-<!--    <title>刮刮乐</title>-->
-<!--    <style type="text/css">-->
-<!--      #c1{-->
-<!--        border: 1px solid blue;-->
-<!--        position: absolute;-->
-<!--      }-->
-
-<!--      #c2{-->
-<!--        border: 1px solid red;-->
-<!--      }-->
-
-<!--      body{-->
-<!--        position: relative;-->
-<!--      }-->
-<!--</style>-->
-<!--  </head>-->
-<!--  <body>-->
-
-<!--    <canvas id="c1" width="960" height="1440"></canvas>-->
-
-<!--    <canvas id="c2" width="960" height="1440"></canvas>-->
-
-<!--  </body>-->
-<!--  <script type="text/javascript">-->
-<!--    let c1 = document.getElementById("c1");-->
-<!--    let c2 = document.getElementById("c2");-->
-
-<!--    let ctx1 = c1.getContext("2d");-->
-<!--    let ctx2 = c2.getContext("2d");-->
-
-
-<!--    // 绘制图片到底层  canvas2-->
-<!--    let imgs = new Image();-->
-<!--    imgs.src = 'img/boy.jpg';-->
-<!--    imgs.onload = function(){-->
-<!--      ctx2.drawImage(this,0,0)-->
-<!--    }-->
-
-<!--    // 涂层绘制到顶层(即覆盖膜)  canvas1-->
-<!--    ctx1.fillStyle = "lightgray";-->
-<!--    ctx1.fillRect(0,0,960,1440);-->
-
-<!--    ctx1.font = "normal 80px 仿宋";-->
-<!--    ctx1.strokeStyle = "slateblue";-->
-<!--    ctx1.strokeText("请刮开！",320,750);-->
-
-<!--    // 监听canvas的onmousedown事件-->
-<!--    c1.addEventListener('touchstart', (ev) => {-->
-<!--    c1.addEventListener('touchmove', (e) => {-->
-<!--      console.log(e);-->
-<!--      let w = 50;      // 清除区域的宽度-->
-<!--      let h = 50;      // 清除区域的高度-->
-<!--      let x = e.pageX-c1.offsetLeft - w/2;    // 清除区域的x位置-->
-<!--      let y = e.pageY-c1.offsetTop - h/2;    // 清除区域的y位置-->
-<!--      ctx1.clearRect(x,y,w,h);-->
-<!--    });-->
-<!--    });-->
-<!--    c1.addEventListener('touchend', (ev) => {-->
-<!--    // 取消onmousemove事件-->
-<!--    // c1.ontouchmove = null;-->
-<!--        // c1.ontouchcancel = null;-->
-<!--    });-->
-<!--</script>-->
-<!--</html>-->
-
-
 <html>
 
 <head>
@@ -118,7 +48,7 @@
         <!-- 放内容的盒子-->
         <span id="prize">
 <!--                恭喜发财，红包拿来-->
-            <img src="./img/boy.png" alt="" style="width: 100%">
+            <img src="./boy.png" alt="" style="width: 100%">
             </span>
         <!-- 蒙版画布-->
         <canvas id="canvas"></canvas>
